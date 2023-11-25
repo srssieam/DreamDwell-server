@@ -28,3 +28,12 @@
             const result = await usersCollection.insertOne(user);
             res.send(result);
 
+## Step-5)
+    --> retrieve user _id from query the parameter_ _ _
+
+            const id = req.params.id;
+
+    --> Set query document as parameter inside deleteOne().It finds the user with the specified ID in the users array and deletes it if found. _ _ _
+
+            here, query document = { _id: new ObjectId(id) }
+            const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
