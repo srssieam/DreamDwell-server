@@ -10,3 +10,21 @@
     --> now create database and collection in index.js with same name which has been created manually in mongodb
     --> get reviews data from database
     --> your reviews data will be displayed in http://localhost:5000/v1/api/reviews
+## Step-4)
+    --> receive userInfo from client side
+    --> At first check if the user already exist? _ _ _
+
+            const query = {email: user.email}
+            const existingUser = await usersCollection.findOne(query);
+
+    --> If the user email already exist then return response to the client side _ _ _
+
+            if(existingUser){
+            return res.send({ message: 'user already exists', insertedId: null });
+            }
+
+    --> If the user email doesn't exist then insert into usersCollection and send response to the client side _ _ _
+
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+

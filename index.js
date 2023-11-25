@@ -27,10 +27,27 @@ async function run() {
     // await client.connect();
 
     const reviewsCollection = client.db("dream-dwell").collection("reviews");
+    const usersCollection = client.db("dream-dwell").collection("users");
 
-
+    // reviews related api
     app.get('/v1/api/reviews', async(req, res) => {
       const result = await reviewsCollection.find().toArray();
+      res.send(result);
+    })
+
+    // user related api
+    app.post('/v1/api/users', async(req, res) => {
+      const user = req.body;
+  
+      // don't insert userInfo if user already exists
+      const query = {email: user.email}
+      const existingUser = await usersCollection.findOne(query); // find user with the existing email
+      if(existingUser){
+        return res.send({ message: 'user already exists', insertedId: null });
+      }
+
+      // insert userInfo if user doesn't exist
+      const result = await usersCollection.insertOne(user);
       res.send(result);
     })
 
