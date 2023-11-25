@@ -5,3 +5,8 @@
     --> Database > Connect > Drivers > View full code sample > copy > past
     --> Database Access > Add new database > password > user name > Auto generate secure password > copy > past in .env file
     --> built-in Role > read write > Add user 
+## Step-3)
+    --> Database > collections > create database > INSERT DOCUMENT > view {} > past the json data > Insert
+    --> now create database and collection in index.js with same name which has been created manually in mongodb
+    --> get reviews data from database
+    --> your reviews data will be displayed in http://localhost:5000/v1/api/reviews
