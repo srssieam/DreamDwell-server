@@ -28,6 +28,7 @@ async function run() {
 
     const reviewsCollection = client.db("dream-dwell").collection("reviews");
     const usersCollection = client.db("dream-dwell").collection("users");
+    const propertyCollection = client.db("dream-dwell").collection("properties");
 
     // reviews related api
     app.get('/v1/api/reviews', async(req, res) => {
@@ -107,6 +108,13 @@ async function run() {
       }
       const result = await usersCollection.updateOne(filter, updatedDoc)
       res.send(result);
+    })
+
+
+    // property related api
+    app.get('/v1/api/properties', async (req, res) => {
+      const result = await propertyCollection.find().toArray();
+      res.send(result)
     })
 
     // Send a ping to confirm a successful connection
