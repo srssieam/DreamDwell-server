@@ -89,6 +89,19 @@ async function run() {
       res.send(result);
     })
 
+    // mark as fraud
+    app.patch('/v1/api/users/fraud/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          role: 'fraud'
+        }
+      }
+      const result = await usersCollection.updateOne(filter, updatedDoc)
+      res.send(result);
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
