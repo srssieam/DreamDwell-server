@@ -29,7 +29,7 @@
             res.send(result);
 
 ## Step-5)
-    --> retrieve user _id from query the parameter_ _ _
+    --> retrieve user _id from query parameter_ _ _
 
             const id = req.params.id;
 
@@ -37,3 +37,17 @@
 
             here, query document = { _id: new ObjectId(id) }
             const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
+
+## Step-6)
+    --> retrieve user  _id from query parameter
+    --> set _id as filter document _ _ _
+
+            filter = { _id: new ObjectId(id) };
+
+    --> set document to be updated _ _ _
+
+            updatedDoc = { $set: {role: 'admin'} }
+
+    --> then send updateOne request
+
+            await usersCollection.updateOne(filter, updatedDoc)
