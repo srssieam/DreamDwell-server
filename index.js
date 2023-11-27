@@ -118,6 +118,16 @@ async function run() {
     })
 
     app.get('/v1/api/allVerifiedProperties', async (req, res) => {
+      if(req.query?.search){
+        const filter = req.query.search;
+        // console.log(filter);
+        const query = {
+          property_title: {$regex: filter, $options: 'i'}
+        };
+        const result = await propertyCollection.find(query).toArray();
+        res.send(result);
+        return;
+      }
       const query = { verification_status: "verified" }
       const result = await propertyCollection.find(query).toArray();
       res.send(result)
