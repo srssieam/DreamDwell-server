@@ -146,6 +146,14 @@ async function run() {
       res.send(result)
     })
 
+    app.delete('/v1/api/advertisement/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: id };
+      const result = await advertisementCollection.deleteOne(query);
+      res.send(result);
+    })
+
     app.delete('v1/api/properties/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
