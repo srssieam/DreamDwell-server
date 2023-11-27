@@ -125,7 +125,7 @@ async function run() {
 
     app.get('/v1/api/allVerifiedProperties/:id', async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
-      res.send( await propertyCollection.find(query).toArray() );
+      res.send( await propertyCollection.findOne(query) );
     })
 
     app.delete('v1/api/properties/:id', async (req, res) => {
