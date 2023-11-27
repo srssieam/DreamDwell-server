@@ -29,6 +29,7 @@ async function run() {
     const reviewsCollection = client.db("dream-dwell").collection("reviews");
     const usersCollection = client.db("dream-dwell").collection("users");
     const propertyCollection = client.db("dream-dwell").collection("properties");
+    const advertisementCollection = client.db("dream-dwell").collection("advertisements");
 
     // reviews related api
     app.get('/v1/api/reviews', async(req, res) => {
@@ -136,6 +137,13 @@ async function run() {
     app.get('/v1/api/allVerifiedProperties/:id', async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
       res.send( await propertyCollection.findOne(query) );
+    })
+
+    app.post('/v1/api/advertisement', async (req, res) => {
+      const advertisement = req.body;
+      // console.log(advertisement)
+      const result = await advertisementCollection.insertOne(advertisement);
+      res.send(result)
     })
 
     app.delete('v1/api/properties/:id', async (req, res) => {
