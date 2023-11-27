@@ -154,6 +154,11 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/v1/api/advertisement', async (req, res)=> {
+      const result = await advertisementCollection.find().toArray()
+      res.send(result)
+    })
+
     app.delete('v1/api/properties/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
