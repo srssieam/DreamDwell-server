@@ -132,6 +132,12 @@ async function run() {
         res.send(result);
     })
 
+    app.post('/v1/api/agentAddedProperties', async (req, res) => {
+        const newProperty = req.body;
+        const result = await propertyCollection.insertOne(newProperty);
+        res.send(result);
+    })
+
     app.get('/v1/api/allVerifiedProperties', async (req, res) => {
       if(req.query?.search){
         const filter = req.query.search;
