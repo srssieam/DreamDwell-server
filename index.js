@@ -31,6 +31,7 @@ async function run() {
     const propertyCollection = client.db("dream-dwell").collection("properties");
     const advertisementCollection = client.db("dream-dwell").collection("advertisements");
     const wishlistCollection = client.db("dream-dwell").collection("wishlist");
+    const offeredCollection = client.db("dream-dwell").collection("offeredProperties");
 
     // reviews related api
     app.get('/v1/api/reviews', async(req, res) => {
@@ -257,6 +258,14 @@ async function run() {
     app.get('/v1/api/wishlist/:id', async (req, res) => {
       const query = { _id: req.params.id };
       res.send( await wishlistCollection.findOne(query) );
+    })
+
+    // offered properties
+    app.post('/v1/api/allOfferedProperties', async (req, res) => {
+      const offeredProperty = req.body;
+      // console.log(wishlistProperty)
+      const result = await offeredCollection.insertOne(offeredProperty);
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
