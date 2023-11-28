@@ -39,12 +39,20 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/v1/api/reviews', async(req, res) => {
+      const title = req.query.propertyTitle;
+      const query = { property_title: title };
+      const result = await reviewsCollection.find(query).toArray();
+      res.send(result);
+    })
+
     app.delete('/v1/api/reviews/:id', async(req, res) => {
       const id = req.params.id ;
       const query = { _id: new ObjectId(id) };
       const result = await reviewsCollection.deleteOne(query);
       res.send(result);
     })
+
 
     // user related api
     app.post('/v1/api/users', async(req, res) => {
