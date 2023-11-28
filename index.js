@@ -30,6 +30,7 @@ async function run() {
     const usersCollection = client.db("dream-dwell").collection("users");
     const propertyCollection = client.db("dream-dwell").collection("properties");
     const advertisementCollection = client.db("dream-dwell").collection("advertisements");
+    const wishlistCollection = client.db("dream-dwell").collection("wishlist");
 
     // reviews related api
     app.get('/v1/api/reviews', async(req, res) => {
@@ -227,6 +228,14 @@ async function run() {
         }
       }
       const result = await propertyCollection.updateOne(filter,  updatedDoc)
+      res.send(result);
+    })
+
+    // wishlist related api
+    app.post('/v1/api/wishlist', async (req, res) => {
+      const wishlistProperty = req.body;
+      // console.log(wishlistProperty)
+      const result = await wishlistCollection.insertOne(wishlistProperty);
       res.send(result);
     })
 
