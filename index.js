@@ -118,6 +118,13 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/v1/api/agentAddedProperties', async (req, res) => {
+        const email = req.query.email;
+        const query = { agent_email: email };
+        const result = await propertyCollection.find(query).toArray();
+        res.send(result);
+    })
+
     app.get('/v1/api/allVerifiedProperties', async (req, res) => {
       if(req.query?.search){
         const filter = req.query.search;
