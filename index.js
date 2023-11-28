@@ -125,6 +125,13 @@ async function run() {
         res.send(result);
     })
 
+    app.delete('/v1/api/agentAddedProperties/:id', async (req, res) => {
+        const id = req.params.id
+        const query = { _id: new ObjectId(id) };
+        const result = await propertyCollection.deleteOne(query);
+        res.send(result);
+    })
+
     app.get('/v1/api/allVerifiedProperties', async (req, res) => {
       if(req.query?.search){
         const filter = req.query.search;
