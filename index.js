@@ -268,6 +268,20 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/v1/api/usersOfferedProperties', async (req, res) => {
+      const email = req.query.email;
+      const query = { buyer_email: email }
+      const result = await offeredCollection.find(query).toArray();
+      res.send(result);
+    })
+
+    app.get('/v1/api/allOfferedProperties', async (req, res) => {
+      const email = req.query.email;
+      const query = { buyer_email: email }
+      const result = await offeredCollection.find(query).toArray();
+      res.send(result);
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
