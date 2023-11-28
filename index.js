@@ -249,9 +249,14 @@ async function run() {
 
     app.delete('/v1/api/wishlist/:id', async (req, res) => {
       const id = req.params.id;
-      const query = { _id: new ObjectId(id) }
+      const query = { _id: id }
       const result = await wishlistCollection.deleteOne(query)
       res.send(result);
+    })
+
+    app.get('/v1/api/wishlist/:id', async (req, res) => {
+      const query = { _id: req.params.id };
+      res.send( await wishlistCollection.findOne(query) );
     })
 
     // Send a ping to confirm a successful connection
