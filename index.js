@@ -132,6 +132,26 @@ async function run() {
         res.send(result);
     })
 
+    app.get('/v1/api/agentAddedProperties/:id', async (req, res) => {
+        const id = req.params.id
+        const query = { _id: new ObjectId(id) };
+        const result = await propertyCollection.findOne(query);
+        res.send(result);
+    })
+
+    app.patch('/v1/api/agentAddedProperties/:id', async (req, res) => {
+        const id = req.params.id;
+        // console.log(id)
+        const property = req.body;
+        // console.log(property)
+        const filter = { _id: new ObjectId(id) };
+        const updateDoc = {
+          $set: property     
+        }
+        const result = await propertyCollection.updateOne(filter,updateDoc);
+        res.send(result);
+    })
+
     app.post('/v1/api/agentAddedProperties', async (req, res) => {
         const newProperty = req.body;
         const result = await propertyCollection.insertOne(newProperty);
