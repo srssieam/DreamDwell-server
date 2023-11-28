@@ -282,6 +282,30 @@ async function run() {
       res.send(result);
     })
 
+    app.patch('/v1/api/offeredProperties/accept/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: id }
+      const updatedDoc = {
+        $set: {
+          status: "accepted"
+        }
+      }
+      const result = await offeredCollection.updateOne(filter, updatedDoc)
+      res.send(result);
+    })
+
+    app.patch('/v1/api/offeredProperties/reject/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: id }
+      const updatedDoc = {
+        $set: {
+          status: "rejected"
+        }
+      }
+      const result = await offeredCollection.updateOne(filter, updatedDoc)
+      res.send(result);
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
