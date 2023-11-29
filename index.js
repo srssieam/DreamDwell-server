@@ -253,6 +253,15 @@ async function run() {
       res.send(result);
     })
 
+    app.delete('/v1/api/fraudProperty/:email', async (req,res)=>{
+      const fraudUser = req.params.email;
+      // console.log(fraudUser)
+      const query = { agent_email: fraudUser }
+      const result = await propertyCollection.deleteMany(query);
+      const result2 = await advertisementCollection.deleteMany(query);
+      res.send([result, result2])
+    })
+
     // wishlist related api
     app.post('/v1/api/wishlist', async (req, res) => {
       const wishlistProperty = req.body;
