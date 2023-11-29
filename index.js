@@ -48,13 +48,21 @@ async function run() {
       console.log('user for token', loggedUser);
       const token = jwt.sign(loggedUser, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '5h' }) // generated a token for logged user
 
-      res.cookie('token', token, {
+      res.cookie('dreamDwell', token, {
         httpOnly: true,
         secure: true,
         sameSite: 'none'
       	})
       res.send({success: true});
     })
+
+    // delete the  cookie in client site
+    app.post('/logout', async(req, res) =>{
+      const loggedUser = req.body;  // get loggedUser={}
+      console.log('logging out', loggedUser)
+      res.clearCookie('dreamDwell', { maxAge: 0 }).send({ success: true }) // clear the cookie
+  })
+
 
 
     // reviews related api
