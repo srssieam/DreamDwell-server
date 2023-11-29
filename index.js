@@ -147,20 +147,39 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/v1/api/users/admin/:email', verifyToken, async(req, res)=>{
+    // check admin
+    app.get('/v1/api/users/admin/:email', verifyToken, async (req, res) => {
       const email = req.params.email;
-      if(email !== req.user.email){
-          return res.status(403).send({message: 'unauthorized access'})
+      if (email !== req.user.email) {
+        return res.status(403).send({ message: 'unauthorized access' })
       }
 
       const query = { email: email };
       const user = await usersCollection.findOne(query);
       let admin = false;
-      if(user){  //  if user.role === admin then result will be true
-          admin = user?.role === 'admin';
+      if (user) {  //  if user.role === admin then result will be true
+        admin = user?.role === 'admin';
       }
       res.send({ admin })
-  })
+    })
+
+
+    // check agent
+    app.get('/v1/api/users/agent/:email', verifyToken, async (req, res) => {
+      const email = req.params.email;
+      if (email !== req.user.email) {
+        return res.status(403).send({ message: 'unauthorized access' })
+      }
+
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      let agent = false;
+      if (user) {  //  if user.role === agent then result will be true
+        agent = user?.role === 'agent';
+      }
+      res.send({ agent })
+    })
+
 
     // update user to admin
     app.patch('/v1/api/users/admin/:id', verifyToken, async (req, res) => {
@@ -176,7 +195,7 @@ async function run() {
     })
 
     // update user to agent
-    app.patch('/v1/api/users/agent/:id',verifyToken, async (req, res) => {
+    app.patch('/v1/api/users/agent/:id', verifyToken, async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const updatedDoc = {
@@ -342,15 +361,15 @@ async function run() {
       // console.log(email);
       // console.log('cookies from client site', req.cookies)  // get cookies from client site
       // console.log('token owner info', req.user.email)
-      if(req.user.email !== req.query.email){  // compare between user email and email in data base
-        return res.status(403).send({message: 'forbidden access'})
+      if (req.user.email !== req.query.email) {  // compare between user email and email in data base
+        return res.status(403).send({ message: 'forbidden access' })
       }
       const query = { buyerEmail: email }
       const result = await wishlistCollection.find(query).toArray();
       res.send(result);
     })
 
-    app.delete('/v1/api/wishlist/:id',verifyToken, async (req, res) => {
+    app.delete('/v1/api/wishlist/:id', verifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: id }
       const result = await wishlistCollection.deleteOne(query)
