@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -342,6 +343,22 @@ async function run() {
       const result = await offeredCollection.updateOne(filter, updatedDoc)
       res.send(result);
     })
+
+
+    // payment intent
+    app.post('/create-payment-intent', async(req, res) => {
+      const { price } = req.body;  // get price from client
+      const amount = parsInt(price * 100); // convert tk into poisa
+      const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount,
+          currency: 'usd',
+          payment_method_types: ['card']
+      })
+
+      res.send({
+          clientSecret: paymentIntent.client_secret
+      })
+  })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
