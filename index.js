@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,6 +34,17 @@ async function run() {
     const advertisementCollection = client.db("dream-dwell").collection("advertisements");
     const wishlistCollection = client.db("dream-dwell").collection("wishlist");
     const offeredCollection = client.db("dream-dwell").collection("offeredProperties");
+
+
+
+    //auth related api
+    app.post('/jwt', async (req, res) => {
+      const loggedUser = req.body; // get the loggedUser from client site
+      console.log('user for token', loggedUser);
+      const token = jwt.sign(loggedUser, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '5h' }) // generated a token for logged user
+      res.send({ token }); // send the token to client site
+    })
+
 
     // reviews related api
     app.get('/v1/api/reviews', async(req, res) => {
@@ -320,7 +332,7 @@ async function run() {
       res.send(result);
     })
 
-    // todo
+    
     app.patch('/v1/api/allOfferedProperties/paid/:id', async (req, res) => {
       const id = req.params.id;
       const filter = { _id: id }
