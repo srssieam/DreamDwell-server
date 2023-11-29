@@ -305,6 +305,13 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/v1/api/usersOfferedProperties/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: id }
+      const result = await offeredCollection.find(query).toArray();
+      res.send(result);
+    })
+
     app.get('/v1/api/allOfferedProperties', async (req, res) => {
       const email = req.query.email;
       const query = { buyer_email: email }
