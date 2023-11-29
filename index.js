@@ -35,15 +35,22 @@ async function run() {
 
     // reviews related api
     app.get('/v1/api/reviews', async(req, res) => {
-      const result = await reviewsCollection.find().toArray();
+      const title = req.query.propertyTitle;
+      if(title){
+        const query = { property_title: title };
+        const result = await reviewsCollection.find(query).sort( { _id : -1} ).toArray();
+        res.send(result);
+        return;
+      }
+
+      const result = await reviewsCollection.find().sort( { _id : -1} ).toArray();
       res.send(result);
     })
 
-    app.get('/v1/api/reviews', async(req, res) => {
-      const title = req.query.propertyTitle;
-      const query = { property_title: title };
-      const result = await reviewsCollection.find(query).toArray();
-      res.send(result);
+    app.get('/v1/api/myReviews', async(req, res) => {
+      const name = req.query.reviewerName;
+      const result = await reviewsCollection.find({reviewer_name: name}).sort( { _id : -1} ).toArray();
+      res.send(result)
     })
 
     app.delete('/v1/api/reviews/:id', async(req, res) => {
@@ -51,6 +58,12 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await reviewsCollection.deleteOne(query);
       res.send(result);
+    })
+
+    app.post('/v1/api/reviews', async(req, res) => {
+      const newReview = req.body;
+      const result = await reviewsCollection.insertOne(newReview);
+      res.send(result)
     })
 
 
