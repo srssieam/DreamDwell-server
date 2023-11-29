@@ -21,7 +21,7 @@ app.use(cookieParser());
 // middleware for user verification
 const verifyToken = (req, res, next) => {
   const token = req?.cookies?.dreamDwell;   // get the cookie from client site
-  console.log('token in the middleware', token);
+  // console.log('token in the middleware', token);
   // if no token available
   if (!token) {
     return res.status(401).send({ message: 'unauthorized access' })
@@ -146,6 +146,21 @@ async function run() {
       const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
       res.send(result);
     })
+
+    app.get('/v1/api/users/admin/:email', verifyToken, async(req, res)=>{
+      const email = req.params.email;
+      if(email !== req.user.email){
+          return res.status(403).send({message: 'unauthorized access'})
+      }
+
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      let admin = false;
+      if(user){  //  if user.role === admin then result will be true
+          admin = user?.role === 'admin';
+      }
+      res.send({ admin })
+  })
 
     // update user to admin
     app.patch('/v1/api/users/admin/:id', verifyToken, async (req, res) => {
