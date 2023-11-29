@@ -320,6 +320,19 @@ async function run() {
       res.send(result);
     })
 
+    // todo
+    app.patch('/v1/api/allOfferedProperties/paid/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: id }
+      const updatedDoc = {
+        $set: {
+          status: "Paid"
+        }
+      }
+      const result = await offeredCollection.updateOne(filter, updatedDoc)
+      res.send(result); 
+    })
+
     app.patch('/v1/api/offeredProperties/accept/:id', async (req, res) => {
       const id = req.params.id;
       const filter = { _id: id }
@@ -346,9 +359,10 @@ async function run() {
 
 
     // payment intent
-    app.post('/create-payment-intent', async(req, res) => {
-      const { price } = req.body;  // get price from client
-      const amount = parsInt(price * 100); // convert tk into poisa
+    app.post('/v1/api/create-payment-intent', async(req, res) => {
+      const {price} = req.body;  // get price from client
+      console.log(price)
+      const amount = parseInt(price * 100); // convert tk into poisa
       const paymentIntent = await stripe.paymentIntents.create({
           amount: amount,
           currency: 'usd',
