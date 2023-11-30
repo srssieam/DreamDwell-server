@@ -59,6 +59,7 @@ async function run() {
     const advertisementCollection = client.db("dream-dwell").collection("advertisements");
     const wishlistCollection = client.db("dream-dwell").collection("wishlist");
     const offeredCollection = client.db("dream-dwell").collection("offeredProperties");
+    const soldCollection = client.db("dream-dwell").collection("soldProperties");
 
 
 
@@ -308,8 +309,9 @@ async function run() {
       res.send(result)
     })
 
-    app.delete('v1/api/properties/:id', verifyToken, async (req, res) => {
+    app.delete('/v1/api/properties/:id', verifyToken, async (req, res) => {
       const id = req.params.id;
+      console.log('to delete', id)
       const query = { _id: new ObjectId(id) };
       const result = await propertyCollection.deleteOne(query);
       res.send(result)
@@ -371,13 +373,13 @@ async function run() {
 
     app.delete('/v1/api/wishlist/:id', verifyToken, async (req, res) => {
       const id = req.params.id;
-      const query = { _id: id }
+      const query = { _id: new ObjectId(id) }
       const result = await wishlistCollection.deleteOne(query)
       res.send(result);
     })
 
     app.get('/v1/api/wishlist/:id', async (req, res) => {
-      const query = { _id: req.params.id };
+      const query = { _id: new ObjectId(req.params.id) };
       res.send(await wishlistCollection.findOne(query));
     })
 
@@ -402,10 +404,11 @@ async function run() {
       const result = await offeredCollection.find(query).toArray();
       res.send(result);
     })
+    
 
     app.get('/v1/api/allOfferedProperties', verifyToken, async (req, res) => {
-      const email = req.query.email;
-      const query = { buyer_email: email }
+      const name = req.query.agentName;
+      const query = { agent_name: name }
       const result = await offeredCollection.find(query).toArray();
       res.send(result);
     })
@@ -444,6 +447,21 @@ async function run() {
         }
       }
       const result = await offeredCollection.updateOne(filter, updatedDoc)
+      res.send(result);
+    })
+
+    // sold properties
+    app.post('/v1/api/soldProperties/', verifyToken, async (req, res) => {
+      const soldProperty = req.body;
+      const result = await soldCollection.insertOne(soldProperty);
+      res.send(result)
+    })
+
+    app.get('/v1/api/soldProperties/', verifyToken, async (req, res) => {
+      const name = req.query.agentName;
+      console.log(name)
+      const query = { agent_name: name }
+      const result = await soldCollection.find(query).toArray();
       res.send(result);
     })
 
