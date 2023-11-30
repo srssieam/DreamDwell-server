@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 5000;
 // middleware
 app.use(cors({
   origin: [
+    'https://dreamdwell.netlify.app',
+    'https://dreamdwell.web.app',
     'http://localhost:5173'
   ],
   credentials: true
