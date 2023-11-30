@@ -224,14 +224,14 @@ async function run() {
 
     // property related api
     app.get('/v1/api/properties', async (req, res) => {
-      const result = await propertyCollection.find().toArray();
+      const result = await propertyCollection.find().sort({ _id: -1 }).toArray();
       res.send(result)
     })
 
     app.get('/v1/api/agentAddedProperties', verifyToken, async (req, res) => {
       const email = req.query.email;
       const query = { agent_email: email };
-      const result = await propertyCollection.find(query).toArray();
+      const result = await propertyCollection.find(query).sort({ _id: -1 }).toArray();
       res.send(result);
     })
 
@@ -280,7 +280,7 @@ async function run() {
         return;
       }
       const query = { verification_status: "verified" }
-      const result = await propertyCollection.find(query).toArray();
+      const result = await propertyCollection.find(query).sort({ _id: -1 }).toArray();
       res.send(result)
     })
 
